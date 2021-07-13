@@ -59,6 +59,13 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+
 dependencies {
 
     // Network dependencies
@@ -83,14 +90,21 @@ dependencies {
     // Dagger hilt
     implementation 'com.google.dagger:hilt-android:2.37'
     kapt 'com.google.dagger:hilt-compiler:2.37'
-    androidTestImplementation "com.google.dagger:hilt-android-testing:2.36"
-    kaptAndroidTest "com.google.dagger:hilt-compiler:2.36"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:2.37"
+    kaptAndroidTest "com.google.dagger:hilt-compiler:2.37"
 
     // debugging
     implementation "com.jakewharton.timber:timber:4.7.1"
 
-    // Needs library for elegant permissions
+    // Permissions Library
     implementation 'pub.devrel:easypermissions:3.0.0'
+
+    // Lottie for animations
+    implementation 'com.airbnb.android:lottie:3.7.0'
+
+    // Location tracking
+    implementation 'com.github.quentin7b:android-location-tracker:4.0'
+
 
     // Skydoves libraries
     implementation "com.github.skydoves:baserecyclerviewadapter:1.0.4"
@@ -111,7 +125,6 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'androidx.room:room-ktx:2.3.0'
     kapt 'androidx.room:room-compiler:2.3.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'androidx.preference:preference-ktx:1.1.1'
@@ -119,8 +132,9 @@ dependencies {
     implementation 'br.com.mauker.materialsearchview:materialsearchview:2.0.0-beta02'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.20"
     implementation "androidx.paging:paging-runtime-ktx:3.0.0"
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
 
     // Test Libraries
     testImplementation 'junit:junit:4.13.2'
