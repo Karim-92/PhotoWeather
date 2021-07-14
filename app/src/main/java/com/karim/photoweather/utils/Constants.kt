@@ -3,7 +3,10 @@ package com.karim.photoweather.utils
 import android.Manifest
 
 const val ICON_URL="http://openweathermap.org/img/wn/"
-const val WEATHER_URL="http://api.openweathermap.org/data/2.5/weather"
+const val WEATHER_URL="http://api.openweathermap.org/data/2.5/weather/"
+const val PHOTO_EXTRA_KEY="PHOTO"
+const val TRANSFORMTION_PARAMS="com.skydoves.transformationlayout"
+
 
 object PermissionConstants {
     const val REQUEST_CODE_PERMISSION = 100

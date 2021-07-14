@@ -4,4 +4,5 @@
         \nPress the camera button to add some.</string>
     <string name="camera_button">Camera Button</string>
     <string name="permissions_label">This app needs location and camera permissions in order to function correctly</string>
+    <string name="celsius">°C</string>
 </resources>

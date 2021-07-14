@@ -112,6 +112,9 @@ dependencies {
     implementation ("com.github.skydoves:bindables:1.0.8") {
         exclude group: "com.google.android.material"
     }
+    implementation 'com.github.skydoves:transformationlayout:1.0.9'
+    implementation "com.github.skydoves:bundler:1.0.4"
+
 
     // Standard Libs
     implementation 'androidx.core:core-ktx:1.6.0'
@@ -130,7 +133,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.startup:startup-runtime:1.0.0'
     implementation 'br.com.mauker.materialsearchview:materialsearchview:2.0.0-beta02'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.20"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
     implementation "androidx.paging:paging-runtime-ktx:3.0.0"
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'

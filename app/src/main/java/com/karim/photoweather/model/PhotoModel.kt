@@ -8,9 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "photos")
 @Parcelize
 data class PhotoModel(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = 0,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
     var path: String ="",
-    var lat: Double? = 0.0,
-    var long: Double? = 0.0
+    var lat: Double = 0.0,
+    var lon: Double = 0.0
 ) : Parcelable

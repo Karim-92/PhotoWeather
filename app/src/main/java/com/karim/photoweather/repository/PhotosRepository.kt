@@ -13,7 +13,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -26,13 +29,15 @@ class PhotosRepository @Inject constructor(
     @WorkerThread
     fun getWeatherInfo(
         lat: Double,
-        lon: Double
+        lon: Double,
+        onStart: ()->Unit,
+        onComplete:()->Unit
     )=flow {
         val weatherInfo = weatherClient.getWeatherDetails(lat, lon)
         weatherInfo.whatIfNotNull {
             emit(weatherInfo)
         }
-    }.flowOn(dispatcher)
+    }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(dispatcher)
 
     @WorkerThread
     suspend fun insertPhoto(photo: PhotoModel){
@@ -53,6 +58,7 @@ class PhotosRepository @Inject constructor(
     fun getPhotosFromDb() = flow {
         val photosList = photosDao.getAllPhotos()
         photosList.whatIfNotNull {
+            Timber.d("Photo list size: ${photosList.size}")
             emit(photosList)
         }
     }.flowOn(Dispatchers.IO)

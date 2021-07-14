@@ -16,8 +16,8 @@
     </style>
 
     <style name="PhotoWeatherSecondaryTextStyle">
-        <item name="android:background">@color/text_bg</item>
-        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.CardView" parent="">

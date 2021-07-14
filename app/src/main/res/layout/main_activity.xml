@@ -30,11 +30,12 @@
             app:adapter="@{adapter}"
             app:photosList="@{vm.photosList}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="4"
+            app:spanCount="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_photo_layout">
 
         </androidx.recyclerview.widget.RecyclerView>
 
