@@ -5,4 +5,6 @@
     <string name="camera_button">Camera Button</string>
     <string name="permissions_label">This app needs location and camera permissions in order to function correctly</string>
     <string name="celsius">°C</string>
+    <string name="now">Now</string>
+    <string name="feels_like">Feels Like</string>
 </resources>

@@ -20,25 +20,39 @@
             android:id="@+id/temp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@{weatherInfo.sys.country}"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@{String.valueOf(weatherInfo.main.temp)}"
+            android:textAppearance="@style/PhotoWeatherSecondaryTextStyle"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/now_tv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Temp" />
+
+        <TextView
+            android:id="@+id/now_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/now"
             android:textAppearance="@style/PhotoWeatherSecondaryTextStyle"
             android:textSize="34sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Temp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:id="@+id/weather_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
             android:padding="8dp"
-            app:layout_constraintStart_toEndOf="@+id/celsius_tv2"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toEndOf="@+id/state_tv"
+            app:layout_constraintTop_toBottomOf="@+id/temp_tv"
             app:weatherImage="@{weatherInfo.weather[0].iconPath}" />
 
         <TextView
@@ -59,9 +73,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@{String.valueOf(weatherInfo.main.feelsLike)}"
+            android:layout_marginTop="32dp"
+            android:text="@string/feels_like"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/state_tv" />
+
+        <TextView
+            android:id="@+id/feelsliketemp_tv"
+            style="@style/PhotoWeatherSecondaryTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="@{String.valueOf(weatherInfo.main.feelsLike)}"
+            app:layout_constraintStart_toEndOf="@+id/feelslike_tv"
             app:layout_constraintTop_toBottomOf="@+id/state_tv" />
 
         <TextView
@@ -70,9 +95,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="@string/celsius"
-            app:layout_constraintStart_toEndOf="@+id/feelslike_tv"
+            app:layout_constraintStart_toEndOf="@+id/feelsliketemp_tv"
             app:layout_constraintTop_toBottomOf="@+id/state_tv" />
 
         <TextView
@@ -81,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="@string/celsius"
             android:textSize="34sp"
             app:layout_constraintStart_toEndOf="@+id/temp_tv"

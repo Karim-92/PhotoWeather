@@ -20,12 +20,11 @@ import com.karim.photoweather.ui.preview.PreviewActivity
 import com.karim.photoweather.utils.PHOTO_EXTRA_KEY
 import com.karim.photoweather.utils.PermissionConstants.PERMISSIONS
 import com.karim.photoweather.utils.PermissionConstants.REQUEST_CODE_PERMISSION
+import com.karim.photoweather.utils.REQUEST_CHECK_SETTINGS
 import com.karim.photoweather.utils.UserLocation
 import com.karim.photoweather.utils.UserLocationInterface
 import com.skydoves.bindables.BindingActivity
 import com.skydoves.bundler.intentOf
-import com.skydoves.transformationlayout.TransformationCompat
-import com.skydoves.transformationlayout.TransformationLayout
 import com.skydoves.transformationlayout.onTransformationStartContainer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -60,12 +59,8 @@ class MainActivity : BindingActivity<MainActivityBinding>(R.layout.main_activity
             adapter = photosAdapter
             vm = viewModel
         }
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO)
-            {
-                locationManager.startLocationUpdates()
-            }
-        }
+
+        startLocationQueries()
 
         binding.noImages.enableMergePathsForKitKatAndAbove(true)
 
@@ -122,23 +117,36 @@ class MainActivity : BindingActivity<MainActivityBinding>(R.layout.main_activity
         }
     }
 
+    @SuppressLint("MissingPermission")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val uri: Uri = data?.data!!
-            val photo: PhotoModel = PhotoModel(
-                path = uri.path.toString(),
-                lat = userLocation.latitude,
-                lon = userLocation.longitude
-            )
-            Timber.d("Image URI: ${uri.path}")
-            Timber.d("Userlocation: $userLocation")
-            viewModel.insertPhoto(photo)
-            startPreviewActivity(photo)
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                startLocationQueries()
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        if (location != null) {
+                            userLocation = location
+                        }
+                    }
+            }
         } else {
-            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            if (resultCode == Activity.RESULT_OK) {
+                val uri: Uri = data?.data!!
+                val photo: PhotoModel = PhotoModel(
+                    path = uri.path.toString(),
+                    lat = userLocation.latitude,
+                    lon = userLocation.longitude
+                )
+                Timber.d("Image URI: ${uri.path}")
+                Timber.d("Userlocation: $userLocation")
+                viewModel.insertPhoto(photo)
+                startPreviewActivity(photo)
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -158,10 +166,28 @@ class MainActivity : BindingActivity<MainActivityBinding>(R.layout.main_activity
         }
     }
 
-    fun startPreviewActivity(photo: PhotoModel){
+    fun startPreviewActivity(photo: PhotoModel) {
         intentOf<PreviewActivity> {
             putExtra(PHOTO_EXTRA_KEY to photo)
             startActivity(this@MainActivity)
         }
     }
+
+    fun startLocationQueries() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO)
+            {
+                locationManager.startLocationUpdates()
+            }
+        }
+    }
+
+    override fun onResume() {
+        if (!locationManager.requestingLocationUpdate) {
+            startLocationQueries()
+        }
+        viewModel.resetViewModel()
+        super.onResume()
+    }
+
 }

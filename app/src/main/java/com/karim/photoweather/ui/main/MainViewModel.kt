@@ -44,4 +44,8 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetViewModel(){
+        photosStateFlow.value++
+    }
 }

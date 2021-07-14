@@ -1,6 +1,7 @@
 package com.karim.photoweather.network
 
 import com.karim.photoweather.model.WeatherModel
+import retrofit2.http.GET
 import javax.inject.Inject
 
 class WeatherClient @Inject constructor(

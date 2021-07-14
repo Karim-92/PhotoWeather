@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 import com.squareup.moshi.JsonClass
 
 import com.squareup.moshi.Json
+import kotlinx.parcelize.IgnoredOnParcel
 
 
 @JsonClass(generateAdapter = true)
@@ -42,8 +43,9 @@ data class Weather(
     @Json(name = "description") val description: String,
     @Json(name = "icon") val icon: String
 ) : Parcelable{
-    val iconPath
-        get() = "${ICON_URL}.${icon}@2x.png"
+    @IgnoredOnParcel
+    val iconPath:String
+        get() = "${ICON_URL}${icon}@2x.png"
 }
 
 @JsonClass(generateAdapter = true)

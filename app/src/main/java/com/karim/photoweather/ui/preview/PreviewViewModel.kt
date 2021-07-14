@@ -1,7 +1,6 @@
 package com.karim.photoweather.ui.preview
 
 import androidx.databinding.Bindable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,8 +12,12 @@ import com.skydoves.bindables.asBindingProperty
 import com.skydoves.bindables.bindingProperty
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class PreviewViewModel @AssistedInject constructor(
     private val photosRepository: PhotosRepository,
@@ -26,6 +29,9 @@ class PreviewViewModel @AssistedInject constructor(
     @get:Bindable
     var isLoading: Boolean by bindingProperty(false)
         private set
+
+    @get:Bindable
+    val designatedPhoto = photoModel
 
     private var weatherFlow = weatherDetails.flatMapLatest {
         photosRepository.getWeatherInfo(photoModel.lat,
@@ -40,6 +46,14 @@ class PreviewViewModel @AssistedInject constructor(
     @dagger.assisted.AssistedFactory
     interface AssistedFactory {
         fun create(photoModel: PhotoModel): PreviewViewModel
+    }
+
+    fun deleteImage(photoModel: PhotoModel){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                photosRepository.deletePhotoFromDb(photoModel)
+            }
+        }
     }
 
     companion object {

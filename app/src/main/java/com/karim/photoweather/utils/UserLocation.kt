@@ -3,9 +3,11 @@ package com.karim.photoweather.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 
 /**
@@ -17,11 +19,12 @@ class UserLocation(
     val activity: Activity,
     private val userLocationInterface: UserLocationInterface
 ) {
-    private var mFusedLocationClient: FusedLocationProviderClient? = null
-    private var mSettingsClient: SettingsClient? = null
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var mSettingsClient: SettingsClient
     private lateinit var mLocationRequest: LocationRequest
-    private var mLocationSettingsRequest: LocationSettingsRequest? = null
-    private var mLocationCallback: LocationCallback? = null
+    private lateinit var mLocationSettingsRequest: LocationSettingsRequest
+    private lateinit var mLocationCallback: LocationCallback
+    var requestingLocationUpdate = false
 
     init {
         setupLocationService()
@@ -39,9 +42,8 @@ class UserLocation(
 
     private fun createLocationCallback() {
         mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                userLocationInterface.onLocationRetrieved(locationResult.lastLocation)
+            override fun onLocationResult(locationResult: LocationResult?) {
+                userLocationInterface.onLocationRetrieved(locationResult?.lastLocation)
             }
         }
     }
@@ -54,8 +56,8 @@ class UserLocation(
 
     @SuppressLint("MissingPermission")
     fun startLocationUpdates() {
-        mSettingsClient?.checkLocationSettings(mLocationSettingsRequest)
-            ?.addOnSuccessListener(activity) {
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+            .addOnSuccessListener(activity) {
                 if (ActivityCompat.checkSelfPermission(
                         activity,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -67,18 +69,33 @@ class UserLocation(
                 ) {
                     return@addOnSuccessListener
                 }
-                mFusedLocationClient?.requestLocationUpdates(
+                requestingLocationUpdate = true
+                mFusedLocationClient.requestLocationUpdates(
                     mLocationRequest,
-                    mLocationCallback, Looper.myLooper()
+                    mLocationCallback, Looper.getMainLooper()
                 )
+
+            }.addOnFailureListener(activity) { exception ->
+                if (exception is ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        exception.startResolutionForResult(
+                            activity,
+                            REQUEST_CHECK_SETTINGS
+                        )
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        // Ignore the error.
+                    }
+                }
             }
     }
 
 
     fun stopLocationUpdates() {
-        mFusedLocationClient?.removeLocationUpdates(mLocationCallback)
-        mFusedLocationClient = null
-        mLocationCallback = null
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
     }
 
     private fun createLocationRequest() = LocationRequest.create().apply {

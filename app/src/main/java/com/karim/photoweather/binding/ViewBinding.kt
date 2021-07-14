@@ -18,7 +18,7 @@ object ViewBinding {
 
     @JvmStatic
     @BindingAdapter("weatherImage")
-    fun bindLoadWeatherImage(view: ImageView, url: String) {
+    fun bindLoadWeatherImage(view: ImageView, url: String?) {
         Glide.with(view.context)
             .load(url)
             .into(view)
