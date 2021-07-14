@@ -5,7 +5,7 @@ It allows the user to take an image using their camera and detects the location 
 
 ## Application MAD Score cards
 
-![Summary]https://github.com/Karim-92/PhotoWeather/blob/master/summary.png)
+![Summary](https://github.com/Karim-92/PhotoWeather/blob/master/summary.png)
 ![Kotlin](https://github.com/Karim-92/PhotoWeather/blob/master/kotlin.png)
 ![Jetpack](https://github.com/Karim-92/PhotoWeather/blob/master/jetpack.png)
 
